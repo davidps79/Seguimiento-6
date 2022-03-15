@@ -1,6 +1,9 @@
 package model;
 
-public class Billboard {
+import java.io.Serializable;
+
+public class Billboard implements Serializable{
+	private static final long serialVersionUID = 1L;
 	private int height;
 	private int width;
 	private boolean isInUse;

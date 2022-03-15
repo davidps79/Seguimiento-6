@@ -2,9 +2,13 @@ package model;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 
@@ -12,28 +16,45 @@ public class BillboardSystem {
 	ArrayList<Billboard> billboardData;
 	int reportCounter;
 	
-	public BillboardSystem() {
-		billboardData = new ArrayList<Billboard>();
+	public BillboardSystem() throws IOException, ClassNotFoundException {
+		File file = new File(".\\files\\data.txt");
+		if (file.exists() && !file.isDirectory()) {
+			FileInputStream fis = new FileInputStream(file);
+			ObjectInputStream ois = new ObjectInputStream(fis);
+			@SuppressWarnings("unchecked")
+			ArrayList<Billboard> obj = (ArrayList<Billboard>)ois.readObject();
+			billboardData = obj;		
+			ois.close();
+			fis.close();
+		} else {
+			billboardData = new ArrayList<Billboard>();
+			saveData();
+		}
 		reportCounter = 0;
 	}
 	
-	public void importData(String path) throws IOException, ClassNotFoundException {
-		File file = new File(path);
-		FileReader fr = new FileReader(file);
-		BufferedReader br = new BufferedReader(fr);
-		br.readLine();
-		String line = " START ";
-		String[] tempArr;
-		while ((line = br.readLine()) != null) {
-			tempArr = line.split("\\|");
-			billboardData.add(new Billboard(
-				Integer.parseInt(tempArr[0]),
-				Integer.parseInt(tempArr[1]),
-				Boolean.parseBoolean(tempArr[2]),
-				tempArr[3])
-			);
+	public boolean importData(String path){
+		try {
+			File file = new File(path);
+			FileReader fr = new FileReader(file);
+			BufferedReader br = new BufferedReader(fr);
+			br.readLine();
+			String line = " START ";
+			String[] tempArr;
+			while ((line = br.readLine()) != null) {
+				tempArr = line.split("\\|");
+				billboardData.add(new Billboard(
+					Integer.parseInt(tempArr[0]),
+					Integer.parseInt(tempArr[1]),
+					Boolean.parseBoolean(tempArr[2]),
+					tempArr[3])
+				);
+			}
+			br.close();
+			return true;
+		} catch (IOException e) {
+			return false;
 		}
-		br.close();
 	}
 	
 	public void addBillboard(int width, int height, boolean isInUse, String promotedBrand) {
@@ -90,5 +111,14 @@ public class BillboardSystem {
 		}
 		
 		return s + "\n\nReport" + (reportCounter-1) + ".txt saved in files directory";
+	}
+
+	public void saveData() throws IOException {
+		File file = new File(".\\files\\data.txt");
+		FileOutputStream fos = new FileOutputStream(file);
+		ObjectOutputStream oos = new ObjectOutputStream(fos);
+		oos.writeObject(billboardData);
+		oos.close();
+		fos.close();
 	}
 }
