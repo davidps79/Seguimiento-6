@@ -36,49 +36,49 @@ public class Main {
 				"(3) Add a new billboard the oneline way\n" + 
 				"(4) Show all the billboards\n" +
 				"(5) Export dangerousness report\n" +
-				"(0) Exit"
+				"(0) Exit and save"
 			);
 			int selected = sc.nextInt();
 			sc.nextLine();
-			if (selected>-1 && selected<5) {
-				switch(selected) {
-				case 1:
-					importData();
-					break;
-				case 2:
-					addBillboard();
-					break;
-				case 3:
-					addBillboardOneLine();
-					break;
-				case 4:
-					showBillboards();
-					break;
-				case 5:
-					showDangerousBillboards();
-					break;
-				case 0:
-					System.out.println("Saving data...");
-					backend.saveData();
-					exit = true;
-					sc.close();
-					System.out.println("End of execution");
-					break;
-				}
-				System.out.println("");
-			} else {
-				System.out.println("Please type a valid option");
+			switch(selected) {
+			case 1:
+				importData();
+				break;
+			case 2:
+				addBillboard();
+				break;
+			case 3:
+				addBillboardOneLine();
+				break;
+			case 4:
+				showBillboards();
+				break;
+			case 5:
+				showDangerousBillboards();
+				break;
+			case 0:
+				System.out.println("Saving data...");
+				backend.saveData();
+				exit = true;
+				sc.close();
+				System.out.println("End of execution");
+				break;
+			default:
+				System.out.println("<!> Please type a valid option");
+				break;
 			}
+			System.out.println("");
 		}
 	}
 
 	public void importData() throws ClassNotFoundException, IOException {
 		System.out.println("Please type the absolute path of the file");
+		System.out.println("templates: ./files/Datos1.csv or \"./files/Datos2.csv\"");
 		String path = sc.nextLine(); 
 		if (backend.importData(path)) {
-			System.out.println("Data loaded succesfully");
+			System.out.println("<!> Data loaded succesfully");
 		} else {
-			System.out.println("Please check the path of the file");
+			System.out.println("<!> Please check the path of the file");
 		}
 	}
 	
@@ -104,10 +104,10 @@ public class Main {
 			}
 			
 			backend.addBillboard(width, height, preBoolean==1? true : false, brand);
-			System.out.println("Billboard added succesfully");
+			System.out.println("<!> Billboard added succesfully");
 		} catch (InputMismatchException e) {
 			sc.nextLine();
-			System.out.println("You are using an invalid value");
+			System.out.println("<!> You are using an invalid value");
 		}
 	}
 	
@@ -120,9 +120,9 @@ public class Main {
 			boolean isInUse = Boolean.parseBoolean(parameters[2]);
 			String brand = parameters[3];
 			backend.addBillboard(width, height, isInUse, brand);
-			System.out.println("Billboard added succesfully");
+			System.out.println("<!> Billboard added succesfully");
 		} catch (NumberFormatException e) {
-			System.out.println("You are using invalid values");
+			System.out.println("<!> You are using invalid values");
 		}
 	}
 	
