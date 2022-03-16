@@ -113,7 +113,7 @@ public class BillboardSystem {
 			e.printStackTrace();
 		}
 		
-		return s + "\n\nReport" + (reportCounter-1) + ".txt saved in files directory";
+		return s + "\n\n<!> Report" + (reportCounter-1) + ".txt saved in files directory";
 	}
 
 	public void saveData() throws IOException {
